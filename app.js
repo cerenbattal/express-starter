@@ -135,7 +135,7 @@ app.patch('/user/:id', async (req, res) => {
     console.log(req.body)
     await User.findByIdAndUpdate(req.params.id, req.body)
 
-    await User.res.json({
+    await res.json({
       message: 'User has been updated',
     })
   } catch (error) {
