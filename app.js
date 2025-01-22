@@ -1,4 +1,5 @@
 const express = require('express')
+const { specs, swaggerUi } = require('./config/swagger');
 var path = require('path')
 const mongoose = require('mongoose')
 require('dotenv').config()
@@ -7,6 +8,9 @@ const app = express()
 const port = 3000
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
+app.use(express.json())
+app.use(express.static('public'))
+
 app.use("/users", userRoute);
 app.use("/auth", authRoute);
 
@@ -23,14 +27,13 @@ database.once('connected', () => {
   console.log('Database Connected')
 })
 
-app.use(express.json())
-app.use(express.static('public'))
-
 const publicFolder = path.join(__dirname, 'public')
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
